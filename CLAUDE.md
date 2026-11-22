@@ -11,8 +11,8 @@ Neurohood helps a filmmaker choose how a scene is told. The first pilot follows 
 
 ## Spec and pack
 
-- **Source of truth:** `neurohood-spec.md` (vendor pack with Claude Code implementation comments).
-- **Vendor pack (clean):** `Neurohood vendor documentation pack (v1.0 draft).md`.
+- **Source of truth:** [docs/neurohood-spec.md](docs/neurohood-spec.md) (vendor pack with Claude Code implementation comments).
+- **Vendor pack (clean):** [docs/vendor-pack-v1-draft.md](docs/vendor-pack-v1-draft.md).
 - Keep the full pack out of automatic context imports. Use `rg -n` to find relevant sections by requirement or test ID.
 
 ## Start a session

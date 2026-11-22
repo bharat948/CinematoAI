@@ -1,5 +1,14 @@
 {
   "name": "neurohood",
   "private": true,
-  "workspaces": ["server", "web"]
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "dev:server": "npm run dev --workspace @neurohood/server",
+    "dev:web": "npm run dev --workspace @neurohood/web",
+    "test": "npm test --workspace @neurohood/server",
+    "build": "npm run build --workspace @neurohood/web"
+  }
 }

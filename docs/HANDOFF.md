@@ -5,11 +5,12 @@
 | Item | State |
 | --- | --- |
 | Date | 2026-11-22 |
-| Branch | `master` (uncommitted — scaffold complete) |
-| Last verified | **WO#5 — Recover a billable job (budget reservations, retries, recovery).** 29 tests pass. Fake priced provider (`FakeProvider`) with configurable cost and failure count. `ProviderChain` executes with retry (3× per provider) + fallback to next provider, then escalates. `submitJob` atomically reserves worst-case cost against budget (including parallel held reservations); if insufficient, job is `paused_budget` and project stage becomes `paused_budget`. `runJob` calls the chain, records actual spend, releases reservation. `resumeJobs` resumes `reserved`/`running` jobs after restart. Budget can be raised to un-pause. **Verified:** TC-060 (budget USD 2, 4 jobs complete, 5th paused, spend = $2.00), AC-10 (spend never exceeds $5 ceiling), AC-09 (primary fails → fallback succeeds, asset records fallback provider), AC-08 (completed jobs survive restart; reserved job resumes after restart with no duplicate charges), race (two parallel requests for $0.50 budget — one wins, one pauses). No live provider spend (fixture label). |
-| Spec location | `neurohood-spec.md` (root). Vendor pack: `Neurohood vendor documentation pack (v1.0 draft).md` (root). |
+| Branch | `main`, setup and documentation changes based on `32de6d6` |
+| Local setup | Verified in a disposable checkout with Node 20.20.2 and npm 10.8.2. `npm ci` succeeded, `npm test` passed all 29 tests, and `npm run build` produced the web bundle. With `npm run dev:server` and `npm run dev:web` running, Vite served the app and proxied the empty project list. |
+| Last pilot checkpoint | **WO#5 — Recover a billable job (budget reservations, retries, recovery).** 29 tests pass. Fake priced provider (`FakeProvider`) with configurable cost and failure count. `ProviderChain` executes with retry (3× per provider) + fallback to next provider, then escalates. `submitJob` atomically reserves worst-case cost against budget (including parallel held reservations); if insufficient, job is `paused_budget` and project stage becomes `paused_budget`. `runJob` calls the chain, records actual spend, releases reservation. `resumeJobs` resumes `reserved`/`running` jobs after restart. Budget can be raised to un-pause. **Verified:** TC-060 (budget USD 2, 4 jobs complete, 5th paused, spend = $2.00), AC-10 (spend never exceeds $5 ceiling), AC-09 (primary fails → fallback succeeds, asset records fallback provider), AC-08 (completed jobs survive restart; reserved job resumes after restart with no duplicate charges), race (two parallel requests for $0.50 budget — one wins, one pauses). No live provider spend (fixture label). |
+| Spec location | [Annotated spec](neurohood-spec.md) and [clean vendor pack](vendor-pack-v1-draft.md). |
 | Changed files | `server/src/db.ts` (added jobs, budget_reservations tables; budget_usd column on projects), `server/src/providers.ts` (new — Provider interface, FakeProvider, ProviderChain), `server/src/jobs.ts` (new — submitJob, runJob, resumeJobs, getBudgetSummary, chain registry), `server/src/routes/jobs.ts` (new — POST/GET /jobs, GET/POST /budget), `server/src/routes/projects.ts` (budgetUsd in creation + responses), `server/src/index.ts` (jobs route wired), `server/src/api.test.ts` (29 tests) |
-| Test command | `cd server && npx vitest run` (29 tests pass) |
+| Test command | `npm test` (29 tests pass) |
 | Next action | Implement WO#6 — Run the live pilot: real adapters under agreed cap, full Gate 2 pack, chosen animatic, timed review. |
 
 ## Decisions log
@@ -39,7 +40,7 @@
 - Collaborative mode is the default (OQ-03 provisional).
 - One local lighthouse scene for all pilot work.
 - Original fixtures and zero live generation spend for the first four checks.
-- Stack will follow the suggested direction in vendor pack section 2.1 (TypeScript, PostgreSQL, React) but confirmed when scaffolding starts.
+- The local pilot uses TypeScript, React, Express and SQLite. The vendor pack describes the proposed production stack.
 
 ## Work order
 
