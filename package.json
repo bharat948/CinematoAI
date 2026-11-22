@@ -1,0 +1,5 @@
+{
+  "name": "neurohood",
+  "private": true,
+  "workspaces": ["server", "web"]
+}
